@@ -1,0 +1,27 @@
+const int sensorPin = A0; // Analog pin connected to TDS sensor
+const float VCC = 3.3;    // Supply voltage (NodeMCU ESP8266 operates at 3.3V)
+
+void setup() {
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Read analog voltage from the sensor
+  int sensorValue = analogRead(sensorPin);
+  
+  // Convert analog value to voltage
+  float voltage = sensorValue * (VCC / 1023.0);
+  
+  // Print the voltage and the corresponding TDS value
+  Serial.print("Analog Voltage: ");
+  Serial.print(voltage);
+  Serial.println(" V");
+  
+  // Calculate and print TDS value
+  float tdsValue = voltage * 1000; // Assuming TDS sensor output is linearly proportional to voltage
+  Serial.print("TDS Value: ");
+  Serial.print(tdsValue);
+  Serial.println(" ppm");
+  
+  delay(1000); // Delay before taking the next reading
+}
