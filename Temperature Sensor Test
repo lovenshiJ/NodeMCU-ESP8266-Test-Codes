@@ -1,0 +1,40 @@
+#include <OneWire.h>
+#include <DallasTemperature.h>
+
+// Data wire is connected to GPIO 2 (D4) on NodeMCU ESP8266 board
+const int ONE_WIRE_BUS = 2; // Use actual GPIO number
+
+// Setup a oneWire instance to communicate with any OneWire devices
+OneWire oneWire(ONE_WIRE_BUS);
+
+// Pass our oneWire reference to DallasTemperature library
+DallasTemperature sensors(&oneWire);
+
+void setup() {
+  Serial.begin(9600);
+  
+  // Start communication with the DS18B20 temperature sensor
+  sensors.begin();
+}
+
+void loop() {
+  // Call sensors.requestTemperatures() to issue a global temperature
+  // request to all devices on the bus
+  sensors.requestTemperatures();
+  
+  // Get the temperature in Celsius
+  float temperatureC = sensors.getTempCByIndex(0);
+  
+  // Check if reading is valid
+  if (temperatureC != DEVICE_DISCONNECTED_C) {
+    // Print temperature to serial monitor
+    Serial.print("Temperature: ");
+    Serial.print(temperatureC);
+    Serial.println("°C");
+  } else {
+    Serial.println("Error: Unable to read temperature data");
+  }
+  
+  // Wait for some time before taking the next reading
+  delay(2000);
+}
